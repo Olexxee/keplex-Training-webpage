@@ -47,9 +47,9 @@ export default function Registration() {
     setLoading(true);
 
     const handler = window.PaystackPop.setup({
-      key: "pk_test_c38b82e7f0b02891818d8118acdaf99544cc8c2d",
+      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
       email: form.email,
-      amount: 500000, // ₦5000 in kobo
+      amount: 500000,
       currency: "NGN",
       onSuccess: async (response) => {
         await handlePaymentSuccess(response);
