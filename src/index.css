@@ -1,0 +1,45 @@
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Brand Core */
+  --brand-light: #ffe6f0;
+  --brand: #ff4d6d;
+  --brand-dark: #7a1e48;
+
+  /* Accent Colors */
+  --accent: #ffd166;
+  --accent-dark: #e29500;
+
+  /* Supportive Shades */
+  --neutral-light: #fafafa;
+  --neutral-mid: #e0e0e0;
+  --neutral-dark: #2e2e2e;
+
+  /* Extra Pop */
+  --aqua: #4dddd0;
+  --lavender: #a78bfa;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
