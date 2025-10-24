@@ -12,7 +12,7 @@ export const HeroModels = [
   },
   {
     id: 2,
-    image: "herobg3",
+    image: "hero5",
     heading: "Create Stunning Resin Crafts From Beginner to Pro",
     paragraph:
       "Learn how to make resin jewelry, Keychains, customized jotters and pens,and more with our expert-led courses.",
@@ -25,13 +25,13 @@ export const HeroModels = [
     paragraph:
       "We offer training on how to create nourishing lip care products using safe, skin-friendly ingredients.",
     actions: [{ label: "Get Started", href: "#get-started", primary: true }],
-  }
-  // {
-  //   id: 4,
-  //   image: "",
-  //   heading: "Sales Of Resin Materials",
-  //   paragraph:
-  //     "We provide high-quality resin materials and supplies for all your crafting needs, available at affordable prices.",
-  //   actions: [{ label: "Shop Now", href: "#shop", primary: true }],
-  // },
+  },
+  {
+    id: 4,
+    image: "keplex2",
+    heading: "Sales Of Resin Materials",
+    paragraph:
+      "We provide high-quality resin materials and supplies for all your crafting needs, available at affordable prices.",
+    actions: [{ label: "Shop Now", href: "#shop", primary: true }],
+  },
 ];

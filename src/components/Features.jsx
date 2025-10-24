@@ -5,17 +5,17 @@ const features = [
   {
     title: "Practical Curriculum",
     desc: "Hands-on lessons designed for real results. From resin art to lip-care formulation, our courses combine theory with practical projects you can immediately apply.",
-    image: "keyChain",
+    image: "keplex2",
   },
   {
     title: "Learning Support",
     desc: "Step-by-step guidiance, resources and feedback to ensure you fully understand each lesson and can practice with confidence.",
-    image: "support",
+    image: "craft",
   },
   {
     title: "Full Mentorship",
     desc: "Personalized mentorship to help you overcome challenges, refine your skills, and achieve your creative goals.",
-    image: "mentorship",
+    image: "practical",
   },
 ];
 

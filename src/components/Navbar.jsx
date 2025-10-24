@@ -1,5 +1,5 @@
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import KeplexImage from "../utils/KeplexImage";
 
@@ -7,14 +7,21 @@ export default function Navbar() {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const lastScrollY = useRef(0);
 
-  // Hide/show navbar on scroll
+  // Improved hide/show logic
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious();
-    setHidden(latest > previous && latest > 50);
+    const diff = latest - lastScrollY.current;
+    const goingDown = diff > 5;
+    const goingUp = diff < -10;
+
+    if (goingDown && latest > 100) setHidden(true);
+    else if (goingUp) setHidden(false);
+
+    lastScrollY.current = latest;
   });
 
-  // Lock scrolling when menu is open
+  // Prevent body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "auto";
     document.documentElement.style.overflow = menuOpen ? "hidden" : "auto";
@@ -27,42 +34,52 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  // Variants
+  // Smooth scroll handler for in-page sections
+  const handleScrollTo = (id) => {
+    const el = document.querySelector(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => setMenuOpen(false), 200);
+    } else {
+      // fallback for full page links like /register
+      window.location.href = id;
+    }
+  };
+
+  // Animation Variants
   const menuVariants = {
     open: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
     closed: {},
   };
 
   const linkVariants = {
-    open: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+    open: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
     closed: {
       opacity: 0,
-      y: 30,
+      y: 25,
       transition: { duration: 0.3, ease: "easeIn" },
     },
   };
 
-  // Shared nav link component
   const NavLink = ({ href, label, color }) => (
-    <motion.a
-      href={href}
+    <motion.button
+      onClick={() => handleScrollTo(href)}
       whileHover={{
-        scale: 1.1,
+        scale: 1.05,
         textShadow: `0px 0px 8px ${color}`,
-        color: color,
+        color,
       }}
       whileTap={{ scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 300 }}
-      className="relative text-[var(--neutral-dark)] cursor-pointer"
+      transition={{ type: "spring", stiffness: 250 }}
+      className="relative text-[var(--neutral-light)] cursor-pointer bg-transparent border-none"
     >
       {label}
-      {/* Underline animation */}
       <motion.span
         className="absolute left-0 -bottom-1 h-[2px] w-0 bg-current"
         whileHover={{ width: "100%" }}
         transition={{ duration: 0.3 }}
       />
-    </motion.a>
+    </motion.button>
   );
 
   return (
@@ -79,9 +96,9 @@ export default function Navbar() {
       {/* Logo */}
       <a href="#hero" className="flex items-center">
         <KeplexImage
-          name="logo"
+          name="mainlogo"
           alt="Keplex Logo"
-          className="w-12 h-12 rounded-full object-cover border-2 border-[var(--brand)] shadow-md"
+          className="w-12 h-12 rounded-full object-cover shadow-md"
         />
       </a>
 
@@ -96,46 +113,51 @@ export default function Navbar() {
         />
       </div>
 
-      {/* Mobile Toggle */}
+      {/* Mobile Menu Button */}
       <button
-        className="md:hidden p-2 text-[var(--neutral-dark)] z-50"
-        onClick={() => setMenuOpen(!menuOpen)}
+        className="md:hidden p-2 text-[var(--neutral-dark)] z-[60]"
+        onClick={() => setMenuOpen((prev) => !prev)}
       >
         {menuOpen ? <X size={32} /> : <Menu size={32} />}
       </button>
 
-      {/* Dimmed background */}
+      {/* Dark Background Overlay */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={menuOpen ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4 }}
         onClick={() => setMenuOpen(false)}
-        className="fixed inset-0 bg-black/40 z-40 pointer-events-auto"
+        className={`fixed inset-0 bg-black/70 backdrop-blur-sm z-40 transition-all duration-300 ${
+          menuOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
       />
 
-      {/* Mobile Menu */}
+      {/* Centered Mobile Menu */}
       <motion.div
-        initial={{ x: "100%", opacity: 0 }}
-        animate={menuOpen ? { x: 0, opacity: 1 } : { x: "100%", opacity: 0 }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="fixed inset-0 overflow-hidden bg-[var(--brand-light)]/95 backdrop-blur-xl
-                   flex flex-col items-center justify-center md:hidden z-50"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={
+          menuOpen ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }
+        }
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="fixed inset-0 flex items-center justify-center md:hidden z-50"
       >
-        {/* Close Button */}
-        <button
-          className="absolute top-6 right-6 p-2 text-[var(--neutral-dark)]"
-          onClick={() => setMenuOpen(false)}
-        >
-          <X size={36} />
-        </button>
-
-        {/* Animated Links */}
         <motion.div
-          className="flex flex-col items-center space-y-8 text-2xl font-semibold text-[var(--neutral-dark)]"
+          className="relative bg-[var(--brand-light)]/95 backdrop-blur-xl rounded-3xl shadow-2xl 
+                     p-10 w-[85%] max-w-sm flex flex-col items-center space-y-8 text-2xl font-semibold 
+                     text-[var(--neutral-light)] border border-white/10"
           variants={menuVariants}
           initial="closed"
           animate={menuOpen ? "open" : "closed"}
         >
+          {/* Close Button */}
+          <button
+            className="absolute top-6 right-6 p-2 text-[var(--neutral-light)]"
+            onClick={() => setMenuOpen(false)}
+          >
+            <X size={32} />
+          </button>
+
+          {/* Animated Links */}
           <motion.div variants={linkVariants}>
             <NavLink href="#features" label="Features" color="var(--brand)" />
           </motion.div>

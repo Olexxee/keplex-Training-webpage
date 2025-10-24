@@ -1,25 +1,75 @@
+import { Facebook, Instagram, MessageCircle, Music2 } from "lucide-react";
+
 export default function Footer() {
   return (
-    <footer className="w-full bg-blue-900 text-white py-8">
-      <div className="px-6 md:px-12 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="text-sm">
+    <footer className="w-full bg-neutral-900 text-white py-8">
+      <div className="px-6 md:px-12 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Left Section */}
+        <div className="text-sm text-center md:text-left text-neutral-300">
           © {new Date().getFullYear()} <strong>Keplex Training</strong>. All
           rights reserved.
         </div>
 
-        <div className="flex items-center gap-4">
-          <a href="#" className="text-xs md:text-sm hover:underline">
-            Privacy
-          </a>
-          <a href="#" className="text-xs md:text-sm hover:underline">
-            Terms
-          </a>
-          <a
-            href="#registration"
-            className="bg-green-500 px-4 py-2 rounded text-white text-sm"
-          >
-            Register
-          </a>
+        {/* Right Section */}
+        <div className="flex flex-col md:flex-row items-center gap-4">
+          {/* Links */}
+          <div className="flex items-center gap-4 text-neutral-400">
+            <a
+              href="#"
+              className="text-xs md:text-sm hover:text-green-400 transition-colors"
+            >
+              Privacy
+            </a>
+            <a
+              href="#"
+              className="text-xs md:text-sm hover:text-green-400 transition-colors"
+            >
+              Terms
+            </a>
+          </div>
+
+          {/* Divider */}
+          <div className="hidden md:block w-px h-5 bg-neutral-600 mx-2" />
+
+          {/* Social Icons */}
+          <div className="flex items-center gap-4">
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="hover:text-green-400 transition-colors"
+            >
+              <Facebook size={20} />
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="hover:text-green-400 transition-colors"
+            >
+              <MessageCircle size={20} />
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TikTok"
+              className="hover:text-green-400 transition-colors"
+            >
+              <Music2 size={20} />
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="hover:text-green-400 transition-colors"
+            >
+              <Instagram size={20} />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -81,7 +81,7 @@ export default function Registration() {
     >
       {/* Background image */}
       <KeplexImage
-        name="registerBg"
+        name="keplex"
         alt="Registration Background"
         className="absolute inset-0 w-full h-full object-cover"
       />

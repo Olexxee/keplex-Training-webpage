@@ -4,6 +4,14 @@ import keyChain2 from "../assets/images/image3.jpg";
 import keyChain from "../assets/images/image4.jpg";
 import ringImg from "../assets/images/image5.jpg";
 import hero from "../assets/images/hero.jpg";
+import craft from "../assets/images/craft.jpg";
+import hero5 from "../assets/images/hero5.jpg";
+import keplex from "../assets/images/keplex.jpg";
+import keplex2 from "../assets/images/keplex2.jpg";
+import mainlogo from "../assets/images/mainlogo.jpg";
+import practical from "../assets/images/practical.jpg";
+import lipcarevid from "../assets/videos/lipcarevidmp4.mp4";
+import resinvideo from "../assets/videos/resinvideo.mp4";
 import support from "../assets/images/support.jpg";
 import herobg1 from "../assets/images/herobg1.jpg";
 import herobg2 from "../assets/images/herobg2.jpg";
@@ -24,6 +32,15 @@ import keychainWork from "../assets/images/keychainWork.jpg";
 export const localImages = {
   background: backgroundImg,
   logo: logoImg,
+  mainlogo,
+  craft,
+  practical,
+  lipcarevid,
+  resinvideo,
+  hero5,
+  keplex,
+  keplex2,
+
   keyChain,
   keyChain2,
   ring: ringImg,
