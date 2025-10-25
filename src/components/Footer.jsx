@@ -34,7 +34,7 @@ export default function Footer() {
           {/* Social Icons */}
           <div className="flex items-center gap-4">
             <a
-              href="#"
+              href="https://www.facebook.com/share/1Aw9LNYjkD/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
@@ -43,7 +43,7 @@ export default function Footer() {
               <Facebook size={20} />
             </a>
             <a
-              href="#"
+              href="https://wa.me/2348101064798"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
@@ -52,7 +52,7 @@ export default function Footer() {
               <MessageCircle size={20} />
             </a>
             <a
-              href="#"
+              href="https://www.tiktok.com/@kcrafthub_ileife?_t=ZS-90pEipnDZ0p&_r=1"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="TikTok"
@@ -61,7 +61,7 @@ export default function Footer() {
               <Music2 size={20} />
             </a>
             <a
-              href="#"
+              href="https://www.instagram.com/keplexcrafthub5?igsh=dm9jcnVqcWNwMjky"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"

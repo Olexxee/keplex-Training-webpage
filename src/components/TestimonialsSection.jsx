@@ -23,9 +23,12 @@ export default function TestimonialsSection() {
     file: null,
   });
 
-  // 🔹 Live Fetch Testimonials (Realtime sync)
+  // 🔹 Live fetch from Firestore
   useEffect(() => {
-    const q = query(collection(db, "testimonials"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(db, "testimonials"),
+      orderBy("createdAt", "desc")
+    );
     const unsub = onSnapshot(q, (snapshot) => {
       const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setTestimonials(list);
@@ -33,7 +36,7 @@ export default function TestimonialsSection() {
     return () => unsub();
   }, []);
 
-  // 🔹 Average Rating
+  // 🔹 Average rating
   const averageRating =
     testimonials.length > 0
       ? (
@@ -42,12 +45,12 @@ export default function TestimonialsSection() {
         ).toFixed(1)
       : 0;
 
-  // 🔹 Rating Breakdown
+  // 🔹 Rating breakdown
   const ratingCounts = [5, 4, 3, 2, 1].map(
     (star) => testimonials.filter((t) => t.rating === star).length
   );
 
-  // 🔹 Add Review
+  // 🔹 Submit review
   const handleAddReview = async (e) => {
     e.preventDefault();
 
@@ -78,12 +81,10 @@ export default function TestimonialsSection() {
           storage,
           `testimonials/${Date.now()}_${newReview.file.name}`
         );
-
         await uploadBytes(fileRef, newReview.file);
         imageUrl = await getDownloadURL(fileRef);
       }
 
-      // ✅ Add to Firestore
       const newDoc = {
         name: newReview.name.trim(),
         comment: newReview.comment.trim(),
@@ -93,8 +94,6 @@ export default function TestimonialsSection() {
       };
 
       const docRef = await addDoc(collection(db, "testimonials"), newDoc);
-
-      // ✅ Optimistic UI update
       setTestimonials((prev) => [
         { id: docRef.id, ...newDoc, createdAt: new Date() },
         ...prev,
@@ -112,31 +111,22 @@ export default function TestimonialsSection() {
 
   return (
     <section className="relative w-full py-20 overflow-hidden">
-      {/* 🔮 Animated Gradient Background */}
+      {/* 🔮 Animated gradient background */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-[color:var(--brand-light)] via-[color:var(--aqua)] to-[color:var(--lavender)]"
-        animate={{
-          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-        }}
-        transition={{
-          duration: 30,
-          ease: "linear",
-          repeat: Infinity,
-        }}
-        style={{
-          backgroundSize: "200% 200%",
-          opacity: 0.4,
-        }}
+        animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+        transition={{ duration: 30, ease: "linear", repeat: Infinity }}
+        style={{ backgroundSize: "200% 200%", opacity: 0.4 }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 z-10">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 z-10">
         {/* 🟢 Card 1: Average Rating */}
-        <div className="h-full bg-gradient-to-br from-[color:var(--brand-light)] to-white/30 backdrop-blur-xl border border-[color:var(--brand)] rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center">
-          <h3 className="text-xl font-bold text-[color:var(--brand-dark)] mb-4">
+        <div className="bg-gradient-to-br from-[color:var(--brand-light)] to-white/30 backdrop-blur-xl border border-[color:var(--brand)] rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center text-center">
+          <h3 className="text-lg md:text-xl font-bold text-[color:var(--brand-dark)] mb-4">
             Average Rating
           </h3>
           <RatingStars rating={parseFloat(averageRating)} />
-          <p className="text-4xl font-extrabold text-[color:var(--brand)] mt-2">
+          <p className="text-3xl md:text-4xl font-extrabold text-[color:var(--brand)] mt-2">
             {averageRating}
           </p>
           <span className="text-sm text-gray-800 mt-2">
@@ -145,8 +135,8 @@ export default function TestimonialsSection() {
         </div>
 
         {/* 🟡 Card 2: Breakdown */}
-        <div className="h-full bg-gradient-to-br from-[color:var(--accent)]/30 to-[color:var(--accent-dark)]/10 backdrop-blur-lg border border-[color:var(--accent-dark)] rounded-2xl shadow-lg p-6 flex flex-col justify-center">
-          <h3 className="text-xl font-bold text-[color:var(--accent-dark)] mb-4 text-center">
+        <div className="bg-gradient-to-br from-[color:var(--accent)]/30 to-[color:var(--accent-dark)]/10 backdrop-blur-lg border border-[color:var(--accent-dark)] rounded-2xl shadow-lg p-6 flex flex-col justify-center">
+          <h3 className="text-lg md:text-xl font-bold text-[color:var(--accent-dark)] mb-4 text-center">
             Ratings Breakdown
           </h3>
           {ratingCounts.map((count, idx) => {
@@ -154,23 +144,26 @@ export default function TestimonialsSection() {
             const percent =
               testimonials.length > 0 ? (count / testimonials.length) * 100 : 0;
             return (
-              <div key={star} className="flex items-center mb-2">
-                <span className="w-12 text-sm font-medium">{star}★</span>
+              <div
+                key={star}
+                className="flex items-center mb-2 text-sm md:text-base"
+              >
+                <span className="w-10 md:w-12 font-medium">{star}★</span>
                 <div className="flex-1 h-3 bg-white/40 rounded-full overflow-hidden mx-2">
                   <div
                     className="h-full bg-[color:var(--aqua)] transition-all"
                     style={{ width: `${percent}%` }}
                   />
                 </div>
-                <span className="w-8 text-sm">{count}</span>
+                <span className="w-6 md:w-8">{count}</span>
               </div>
             );
           })}
         </div>
 
         {/* 🔵 Card 3: Carousel */}
-        <div className="h-full bg-gradient-to-br from-[color:var(--lavender)]/30 to-white/20 backdrop-blur-xl border border-[color:var(--lavender)] rounded-2xl shadow-lg p-1 flex flex-col">
-          <h3 className="text-xl font-bold text-[color:var(--lavender)] mb-4 text-center">
+        <div className="bg-gradient-to-br from-[color:var(--lavender)]/30 to-white/20 backdrop-blur-xl border border-[color:var(--lavender)] rounded-2xl shadow-lg p-6 flex flex-col min-h-[350px]">
+          <h3 className="text-lg md:text-xl font-bold text-[color:var(--lavender)] mb-4 text-center">
             Student Testimonials
           </h3>
 
@@ -186,12 +179,15 @@ export default function TestimonialsSection() {
         </div>
 
         {/* 📝 Card 4: Add Review */}
-        <div className="h-full bg-gradient-to-br from-white/40 to-[color:var(--brand-light)]/30 backdrop-blur-xl border border-[color:var(--brand-light)] rounded-2xl shadow-lg p-6 flex flex-col">
-          <h3 className="text-xl font-bold text-[color:var(--brand-dark)] mb-4 text-center">
+        <div className="bg-gradient-to-br from-white/40 to-[color:var(--brand-light)]/30 backdrop-blur-xl border border-[color:var(--brand-light)] rounded-2xl shadow-lg p-6 flex flex-col">
+          <h3 className="text-lg md:text-xl font-bold text-[color:var(--brand-dark)] mb-4 text-center">
             Share Your Experience
           </h3>
 
-          <form onSubmit={handleAddReview} className="flex-1 flex flex-col justify-between space-y-4">
+          <form
+            onSubmit={handleAddReview}
+            className="flex-1 flex flex-col justify-between space-y-4"
+          >
             <input
               type="text"
               placeholder="Your Name"
@@ -199,7 +195,7 @@ export default function TestimonialsSection() {
               onChange={(e) =>
                 setNewReview((prev) => ({ ...prev, name: e.target.value }))
               }
-              className="w-full px-3 py-2 rounded-lg border-2 border-transparent focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[color:var(--brand-light)] bg-white/70 backdrop-blur-sm shadow-sm"
+              className="w-full px-3 py-2 rounded-lg border-2 border-transparent focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[color:var(--brand-light)] bg-white/70 backdrop-blur-sm shadow-sm text-sm md:text-base"
               required
             />
 
@@ -218,7 +214,7 @@ export default function TestimonialsSection() {
               onChange={(e) =>
                 setNewReview((prev) => ({ ...prev, comment: e.target.value }))
               }
-              className="w-full px-3 py-2 rounded-lg border-2 border-transparent focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[color:var(--brand-light)] bg-white/70 backdrop-blur-sm shadow-sm resize-none"
+              className="w-full px-3 py-2 rounded-lg border-2 border-transparent focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[color:var(--brand-light)] bg-white/70 backdrop-blur-sm shadow-sm resize-none text-sm md:text-base"
               rows={3}
               required
             />
@@ -236,7 +232,7 @@ export default function TestimonialsSection() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full py-2 px-4 font-bold rounded-lg shadow-md transition transform flex justify-center items-center gap-2 ${
+              className={`w-full py-2 px-4 font-bold rounded-lg shadow-md transition transform flex justify-center items-center gap-2 text-sm md:text-base ${
                 isSubmitting
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[color:var(--brand)] text-white hover:bg-[color:var(--brand-dark)] hover:scale-[1.02] active:scale-95"
@@ -256,12 +252,12 @@ export default function TestimonialsSection() {
                     r="10"
                     stroke="currentColor"
                     strokeWidth="4"
-                  ></circle>
+                  />
                   <path
                     className="opacity-75"
                     fill="currentColor"
                     d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"
-                  ></path>
+                  />
                 </svg>
               )}
               {isSubmitting ? "Submitting..." : "Submit Review"}

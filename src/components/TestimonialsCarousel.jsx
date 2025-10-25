@@ -1,74 +1,64 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import RatingStars from "./RatingStars";
 
 export default function TestimonialsCarousel({ testimonials }) {
+  const [index, setIndex] = useState(0);
+
+  // Auto-slide
+  useEffect(() => {
+    if (testimonials.length > 1) {
+      const interval = setInterval(() => {
+        setIndex((prev) => (prev + 1) % testimonials.length);
+      }, 4000);
+      return () => clearInterval(interval);
+    }
+  }, [testimonials]);
+
   if (!testimonials || testimonials.length === 0) {
-    return (
-      <p className="text-center text-gray-500 mt-6">
-        No reviews yet. Be the first to share your experience!
-      </p>
-    );
+    return <p className="text-center text-gray-500">No reviews yet.</p>;
   }
 
-  // Duplicate testimonials for seamless looping
-  const duplicatedTestimonials = [...testimonials, ...testimonials];
+  const current = testimonials[index];
 
   return (
-    <div className="relative overflow-hidden py-10">
-      {/* subtle background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/30 pointer-events-none" />
-
+    <div className="relative w-full h-full rounded-xl overflow-hidden flex items-center justify-center">
+      {/* Animated Gradient Background */}
       <motion.div
-        className="flex space-x-6"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: 25,
-            ease: "linear",
-          },
-        }}
+        className="absolute inset-0"
+        style={{ zIndex: -1 }}
+        animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+        transition={{ duration: 30, ease: "linear", repeat: Infinity }}
       >
-        {duplicatedTestimonials.map((t, index) => (
-          <div
-            key={t.id || index}
-            className="relative min-w-[280px] max-w-[320px] flex-shrink-0 rounded-2xl shadow-lg border border-white/20 overflow-hidden"
-          >
-            {/* Background: image if available, else blurred glass */}
-            {t.imageUrl ? (
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url(${t.imageUrl})`,
-                  filter: "blur(8px) brightness(0.6)",
-                }}
-              />
-            ) : (
-              <div className="absolute inset-0 backdrop-blur-md bg-white/10" />
-            )}
-
-            {/* Gradient overlay for readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40" />
-
-            {/* Foreground content */}
-            <div className="relative z-10 p-6 text-white text-center">
-              {t.imageUrl && (
-                <img
-                  src={t.imageUrl}
-                  alt={t.name}
-                  className="w-16 h-16 rounded-full object-cover mx-auto mb-3 border-2 border-white/40"
-                />
-              )}
-              <h4 className="text-lg font-semibold mb-1">{t.name}</h4>
-              <div className="flex justify-center mb-2">
-                <RatingStars rating={t.rating} />
-              </div>
-              <p className="text-sm opacity-90 italic">“{t.comment}”</p>
-            </div>
-          </div>
-        ))}
+        <div className="w-full h-full bg-gradient-to-br from-[color:var(--brand-light)] via-[color:var(--aqua)] to-[color:var(--lavender)] opacity-40" />
       </motion.div>
+
+      {/* Testimonial Card */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current.id}
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-2xl mx-auto bg-white/60 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-lg flex flex-col items-center text-center"
+        >
+          {current.imageUrl && (
+            <img
+              src={current.imageUrl}
+              alt={current.name}
+              className="w-16 h-16 rounded-full object-cover mb-3 border-2 border-[color:var(--brand)]"
+            />
+          )}
+          <h4 className="text-lg font-semibold text-[color:var(--brand-dark)]">
+            {current.name}
+          </h4>
+          <div className="flex justify-center my-2">
+            <RatingStars rating={current.rating} />
+          </div>
+          <p className="text-sm text-gray-700">{current.comment}</p>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
