@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import sendEmail from "../utils/EmailJs"; // ✅ use default import
 import KeplexImage from "../utils/KeplexImage";
-
-// Icons
 import { User, Mail, Phone } from "lucide-react";
 
 export default function Registration() {
@@ -19,15 +18,16 @@ export default function Registration() {
     document.body.appendChild(script);
   }, []);
 
-  // Handle input changes
+  // Handle input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Callback after successful payment
+  // On successful payment
   const handlePaymentSuccess = async (response) => {
     try {
+      // 1️⃣ Save user registration in Firestore
       await addDoc(collection(db, "registrations"), {
         ...form,
         amountPaid: 5000,
@@ -35,14 +35,31 @@ export default function Registration() {
         createdAt: serverTimestamp(),
       });
 
-      setStatus("✅ Registration & Payment successful!");
-      setForm({ name: "", email: "", phone: "" }); // clear form
+      // 2️⃣ Prepare EmailJS template parameters (match your HTML)
+      const emailData = {
+        name: form.name,
+        time: new Date().toLocaleString(),
+        message: `🎉 Congratulations ${form.name}! Your payment of ₦5,000 was successful.\n\nYou can now join our Telegram group using this link:\n👉 https://t.me/YourGroupLinkHere`,
+      };
+
+      // 3️⃣ Send styled email via EmailJS
+      const emailResult = await sendEmail(emailData);
+
+      if (emailResult.success) {
+        setStatus("✅ Registration complete! Check your email for the Telegram link.");
+      } else {
+        setStatus("⚠️ Payment saved but email failed to send.");
+      }
+
+      // 4️⃣ Clear form after success
+      setForm({ name: "", email: "", phone: "" });
     } catch (err) {
-      setStatus("❌ Failed to save registration: " + err.message);
+      console.error(err);
+      setStatus("❌ Failed to save registration or send email: " + err.message);
     }
   };
 
-  // Paystack payment
+  // Paystack handler
   const handlePay = () => {
     setLoading(true);
 
@@ -64,7 +81,7 @@ export default function Registration() {
     handler.openIframe();
   };
 
-  // Form submit
+  // Form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.phone) {
@@ -79,7 +96,7 @@ export default function Registration() {
       id="registration"
       className="relative w-full min-h-screen flex items-center justify-center"
     >
-      {/* Background image */}
+      {/* Background */}
       <KeplexImage
         name="keplex"
         alt="Registration Background"
@@ -87,10 +104,9 @@ export default function Registration() {
       />
       <div className="absolute inset-0 bg-black/50" />
 
-      {/* Foreground content */}
+      {/* Content */}
       <div className="relative z-10 w-full max-w-lg px-6">
         <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-8">
-          {/* Title */}
           <h2 className="text-3xl font-extrabold text-center text-[color:var(--brand-dark)] mb-8">
             Register for Training
           </h2>
@@ -99,10 +115,7 @@ export default function Registration() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Full Name */}
             <div className="relative flex items-center">
-              <User
-                className="absolute left-3 text-[color:var(--brand)]"
-                size={20}
-              />
+              <User className="absolute left-3 text-[color:var(--brand)]" size={20} />
               <input
                 type="text"
                 name="name"
@@ -116,10 +129,7 @@ export default function Registration() {
 
             {/* Email */}
             <div className="relative flex items-center">
-              <Mail
-                className="absolute left-3 text-[color:var(--accent-dark)]"
-                size={20}
-              />
+              <Mail className="absolute left-3 text-[color:var(--accent-dark)]" size={20} />
               <input
                 type="email"
                 name="email"
@@ -133,10 +143,7 @@ export default function Registration() {
 
             {/* Phone */}
             <div className="relative flex items-center">
-              <Phone
-                className="absolute left-3 text-[color:var(--aqua)]"
-                size={20}
-              />
+              <Phone className="absolute left-3 text-[color:var(--aqua)]" size={20} />
               <input
                 type="tel"
                 name="phone"
@@ -148,7 +155,7 @@ export default function Registration() {
               />
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -162,7 +169,6 @@ export default function Registration() {
             </button>
           </form>
 
-          {/* Status message */}
           {status && (
             <p className="mt-6 text-center text-sm font-medium text-gray-700">
               {status}

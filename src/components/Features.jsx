@@ -5,7 +5,7 @@ const features = [
   {
     title: "Practical Curriculum",
     desc: "Hands-on lessons designed for real results. From resin art to lip-care formulation, our courses combine theory with practical projects you can immediately apply.",
-    image: "keplex2",
+    image: "practical",
   },
   {
     title: "Learning Support",
@@ -15,7 +15,7 @@ const features = [
   {
     title: "Full Mentorship",
     desc: "Personalized mentorship to help you overcome challenges, refine your skills, and achieve your creative goals.",
-    image: "practical",
+    image: "keplex2",
   },
 ];
 

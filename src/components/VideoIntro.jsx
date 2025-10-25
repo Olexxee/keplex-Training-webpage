@@ -27,8 +27,8 @@ export default function VideoIntro() {
             <VideoCard
               label="Lipcare"
               color="var(--brand)"
-              src={localImages.lipcarevid}
-              thumbName="videoThumbLipcare"
+              src={localImages.edited}
+              thumbName="edited"
               isPlaying={isPlaying.lipcare}
               onPlay={() => handlePlay("lipcare")}
             />

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@paystack/inline-js": "^2.22.2",
+    "emailjs-com": "^3.2.0",
     "firebase": "^12.3.0",
     "framer-motion": "^12.23.21",
     "lucide-react": "^0.544.0",

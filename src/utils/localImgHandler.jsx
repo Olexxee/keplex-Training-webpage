@@ -4,6 +4,7 @@ import keyChain2 from "../assets/images/image3.jpg";
 import keyChain from "../assets/images/image4.jpg";
 import ringImg from "../assets/images/image5.jpg";
 import hero from "../assets/images/hero.jpg";
+import edited from "../assets/videos/edited.mp4";
 import craft from "../assets/images/craft.jpg";
 import hero5 from "../assets/images/hero5.jpg";
 import keplex from "../assets/images/keplex.jpg";
@@ -37,6 +38,7 @@ export const localImages = {
   practical,
   lipcarevid,
   resinvideo,
+  edited,
   hero5,
   keplex,
   keplex2,
