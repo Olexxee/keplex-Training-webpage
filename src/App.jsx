@@ -19,12 +19,14 @@ import TestimonialsSection from "./components/TestimonialsSection";
 // Admin pages
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminRegistrations from "./pages/admin/AdminRegistrations";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
 import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminStaff from "./pages/admin/AdminStaff";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminTestimonials from "./pages/admin/AdminTestimonials";
 import AdminItems from "./pages/admin/AdminItems";
 
 // Layouts & auth
@@ -33,6 +35,7 @@ import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 import { AuthProvider } from "./context/AuthContext";
 
 // Commerce pages
+import PaymentSuccess from "./pages/payment/PaymentSuccess";
 import CatalogPage from "./pages/catalog/CatalogPage";
 import ItemDetailPage from "./pages/catalog/ItemDetailPage";
 import CartPage from "./pages/cart/CartPage";
@@ -102,6 +105,7 @@ export default function App() {
             <Route path="/orders" element={<MyOrdersPage />} />
             <Route path="/orders/:id" element={<OrderDetailPage />} />
             <Route path="/payment/callback" element={<PaymentCallbackPage />} />
+            <Route path="/payment/success" element={<PaymentSuccess />} />
           </Route>
 
           {/* ── Admin auth (no layout) ─────────────────────────────────── */}
@@ -119,6 +123,7 @@ export default function App() {
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="categories" element={<AdminCategories />} />
+            <Route path="registrations" element={<AdminRegistrations />} />
             <Route path="items" element={<AdminItems />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="customers" element={<AdminCustomers />} />

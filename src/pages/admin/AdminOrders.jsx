@@ -19,7 +19,8 @@ export default function AdminOrders() {
         ...(statusFilter && { status: statusFilter }),
       });
 
-      setOrders(res.data.data || []);
+      const raw = res.data.data;
+      setOrders(Array.isArray(raw) ? raw : []);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load orders");
     } finally {

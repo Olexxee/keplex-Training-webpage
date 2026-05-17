@@ -31,7 +31,7 @@ export default function AdminCategories() {
       setError("");
 
       const res = await getCategories();
-      setCategories(res.data.data || []);
+      setCategories(Array.isArray(res.data.data) ? res.data.data : []);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load categories");
     } finally {
@@ -299,4 +299,4 @@ export default function AdminCategories() {
       </section>
     </div>
   );
-}s
+}
